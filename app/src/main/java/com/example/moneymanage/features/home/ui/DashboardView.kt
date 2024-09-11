@@ -207,7 +207,7 @@ fun DashboardView(
                     },
                     colors = TopAppBarDefaults.smallTopAppBarColors(
                         containerColor = Color.White),
-                    modifier = Modifier.height(if (topBarTitle == "Home") 50.dp else 60.dp)
+                    modifier = Modifier.height(if (topBarTitle == "Home") 50.dp else 50.dp)
                 )
             },
             bottomBar = {

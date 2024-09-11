@@ -1,5 +1,7 @@
 package com.example.moneymanage.features.notes.ui
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -17,15 +19,41 @@ class NoteViewModel @Inject constructor(private val repository: NoteRepository) 
 
     val notes: LiveData<List<NoteModel>> = allNotes.asLiveData()
 
-    fun insert(noteModel: NoteModel) = viewModelScope.launch {
+    fun insert(
+        context: Context,
+        noteModel: NoteModel,
+        onInsert: () -> Unit
+    ) = viewModelScope.launch {
+        if (noteModel.description == ""){
+            Toast.makeText(context, "Enter Description", Toast.LENGTH_SHORT).show()
+            return@launch
+        }
+        if (noteModel.title == ""){
+            Toast.makeText(context, "Enter Title", Toast.LENGTH_SHORT).show()
+            return@launch
+        }
         repository.insert(noteModel)
+        onInsert()
     }
 
     fun delete(noteModel: NoteModel) = viewModelScope.launch {
         repository.delete(noteModel)
     }
 
-    fun update(noteModel: NoteModel) = viewModelScope.launch {
+    fun update(
+        context: Context,
+        noteModel: NoteModel,
+        onUpdate: () -> Unit
+    ) = viewModelScope.launch {
+        if (noteModel.description == ""){
+            Toast.makeText(context, "Enter Description", Toast.LENGTH_SHORT).show()
+            return@launch
+        }
+        if (noteModel.title == ""){
+            Toast.makeText(context, "Enter Title", Toast.LENGTH_SHORT).show()
+            return@launch
+        }
         repository.update(noteModel)
+        onUpdate()
     }
 }

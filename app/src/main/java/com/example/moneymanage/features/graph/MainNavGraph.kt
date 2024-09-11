@@ -37,7 +37,10 @@ fun MainNavGraph(
             //NotificationScreen(innerPadding = innerPadding)
         }
         composable(MainRouteScreen.Notes.route) {
-            NotesView(innerPadding = innerPadding)
+            NotesView(
+                innerPadding = innerPadding,
+                navController = rootNavController
+            )
         }
         composable(MainRouteScreen.Setting.route) {
             //SettingScreen(innerPadding = innerPadding)

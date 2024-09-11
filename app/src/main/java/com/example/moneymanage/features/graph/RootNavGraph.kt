@@ -28,6 +28,9 @@ fun RootNavGraph() {
             moneyManageViewModel = moneyManageViewModel,
             rootNavController = rootNavController
         )
+        NotesGraph(
+            rootNavController = rootNavController
+        )
         //settingNavGraph(rootNavController = rootNavController)
     }
 }

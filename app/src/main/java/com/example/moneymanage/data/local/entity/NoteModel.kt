@@ -11,11 +11,13 @@ data class NoteModel(
     val id: Long = 0,
     val date: Long = 0,
     val title: String,
-    val description: String
+    val description: String,
+    val noteBgColor: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readLong(),
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: ""
     )
@@ -25,6 +27,7 @@ data class NoteModel(
         parcel.writeLong(date)
         parcel.writeString(title)
         parcel.writeString(description)
+        parcel.writeString(noteBgColor)
     }
 
     override fun describeContents(): Int = 0
