@@ -2,6 +2,7 @@ package com.example.moneymanage.features.task.ui
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,7 +41,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,6 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.moneymanage.R
 import com.example.moneymanage.data.local.entity.NoteModel
 import com.example.moneymanage.data.local.entity.TaskModel
 import com.example.moneymanage.features.home.ui.MoneyManageItem
@@ -172,6 +178,33 @@ fun TaskView(
             }
 
             Divider()
+
+            ///Empty Money List
+            if (totalTasksList.value.isEmpty()) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_todo),
+                        contentDescription = "",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .padding(bottom = 2.dp)
+                            .size(40.dp),
+                        colorFilter = ColorFilter.tint(Color.LightGray)
+                    )
+                    Text(
+                        text = "Task Not Found",
+                        color = Color.LightGray,
+                        fontSize = 20.sp,
+                        modifier = Modifier.clickable { }
+                    )
+                }
+
+            }
+            ///Empty Money List
 
             ///List of tasks
             LazyColumn{

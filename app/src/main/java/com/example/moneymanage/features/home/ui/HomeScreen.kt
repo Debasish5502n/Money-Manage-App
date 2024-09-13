@@ -317,7 +317,7 @@ fun HomeScreen(
                                 contentDescription = "",
                                 contentScale = ContentScale.Fit,
                                 modifier = Modifier
-                                    .padding(bottom = 10.dp)
+                                    .padding(bottom = 2.dp)
                                     .size(40.dp),
                                 colorFilter = ColorFilter.tint(Color.LightGray)
                             )
