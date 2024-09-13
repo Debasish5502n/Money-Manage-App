@@ -103,6 +103,7 @@ fun AddUpdateMoneyScreen(
     val selectAccount = remember { mutableStateOf(false) }
     val showDatePicker = remember { mutableStateOf(false) }
     val showTimePicker = remember { mutableStateOf(false) }
+    val btnClicked = remember { mutableStateOf(true) }
 
     val timePickerState = rememberTimePickerState(0, 0, true)
 
@@ -437,81 +438,85 @@ fun AddUpdateMoneyScreen(
                     Text("Cancel")
                 }
 
-                if (moneyManageModel != null) {
-                    Button(
-                        onClick = {
-                            moneyManageViewModel.updateMoney(
-                                context,
-                                MoneyManageModel(
-                                    id = moneyManageModel.id.toLong(),
-                                    amountType = if (amountType.value == "income") "Income" else "Expense",
-                                    amount = if (amountText.value.isEmpty()) {
-                                        0
-                                    } else {
-                                        amountText.value.toInt()
-                                    },
-                                    category = categoryText.value,
-                                    account = accountText.value,
-                                    title = titleText.value,
-                                    description = descriptionText.value,
-                                    image = "",
-                                    timeStamp = moneyManageModel.timeStamp.toLong()
-                                ),
-                                onUpdate = {
-                                    navController?.popBackStack()
-                                }
-                            )
+                if (btnClicked.value) {
+                    if (moneyManageModel != null) {
+                        Button(
+                            onClick = {
+                                btnClicked.value = false
+                                moneyManageViewModel.updateMoney(
+                                    context,
+                                    MoneyManageModel(
+                                        id = moneyManageModel.id.toLong(),
+                                        amountType = if (amountType.value == "income") "Income" else "Expense",
+                                        amount = if (amountText.value.isEmpty()) {
+                                            0
+                                        } else {
+                                            amountText.value.toInt()
+                                        },
+                                        category = categoryText.value,
+                                        account = accountText.value,
+                                        title = titleText.value,
+                                        description = descriptionText.value,
+                                        image = "",
+                                        timeStamp = dateWithTimeText.value.toLong()
+                                    ),
+                                    onUpdate = {
+                                        navController?.popBackStack()
+                                    }
+                                )
 
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 5.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (amountType.value == "expense") Primary else Blue
-                        )
-                    ) {
-                        Text(
-                            text = "Update",
-                            color = Color.White
-                        )
-                    }
-                }else{
-                    Button(
-                        onClick = {
-                            moneyManageViewModel.insertMoney(
-                                context,
-                                MoneyManageModel(
-                                    id = dateWithTimeText.value.toLong(),
-                                    amountType = if (amountType.value == "income") "Income" else "Expense",
-                                    amount = if (amountText.value.isEmpty()) {
-                                        0
-                                    } else {
-                                        amountText.value.toInt()
-                                    },
-                                    category = categoryText.value,
-                                    account = accountText.value,
-                                    title = titleText.value,
-                                    description = descriptionText.value,
-                                    image = "",
-                                    timeStamp = dateWithTimeText.value.toLong()
-                                ),
-                                onInsert = {
-                                    navController?.popBackStack()
-                                }
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 5.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = if (amountType.value == "expense") Primary else Blue
                             )
+                        ) {
+                            Text(
+                                text = "Update",
+                                color = Color.White
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = {
+                                btnClicked.value = false
+                                moneyManageViewModel.insertMoney(
+                                    context,
+                                    MoneyManageModel(
+                                        id = dateWithTimeText.value.toLong(),
+                                        amountType = if (amountType.value == "income") "Income" else "Expense",
+                                        amount = if (amountText.value.isEmpty()) {
+                                            0
+                                        } else {
+                                            amountText.value.toInt()
+                                        },
+                                        category = categoryText.value,
+                                        account = accountText.value,
+                                        title = titleText.value,
+                                        description = descriptionText.value,
+                                        image = "",
+                                        timeStamp = dateWithTimeText.value.toLong()
+                                    ),
+                                    onInsert = {
+                                        navController?.popBackStack()
+                                    }
+                                )
 
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 5.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = if (amountType.value == "expense") Primary else Blue
-                        )
-                    ) {
-                        Text(
-                            text = "Add",
-                            color = Color.White
-                        )
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 5.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = if (amountType.value == "expense") Primary else Blue
+                            )
+                        ) {
+                            Text(
+                                text = "Add",
+                                color = Color.White
+                            )
+                        }
                     }
                 }
 

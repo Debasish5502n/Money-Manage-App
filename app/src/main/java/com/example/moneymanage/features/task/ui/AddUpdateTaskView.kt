@@ -67,7 +67,7 @@ fun AddUpdateTaskView(
     val context = LocalContext.current
 
     var title = rememberSaveable { mutableStateOf(
-        if(taskModel == null){ "" } else { taskModel.title }
+        taskModel?.title ?: ""
     ) }
     var desc = rememberSaveable { mutableStateOf(
         if(taskModel == null){ "" } else { taskModel.description }
@@ -89,9 +89,12 @@ fun AddUpdateTaskView(
     val showDatePicker = remember { mutableStateOf(false) }
     val showTimePicker = remember { mutableStateOf(false) }
     val showMarkAsOption = remember { mutableStateOf(false) }
+    val btnClicked = remember { mutableStateOf(true) }
 
     val options = listOf("Not Started", "In Progress", "Completed")
-    var markAs = remember { mutableStateOf(options[1]) }
+    var markAs = remember { mutableStateOf(
+        taskModel?.markAs ?: options[1]
+    ) }
 
     val timePickerState = rememberTimePickerState(0, 0, true)
 
@@ -295,62 +298,67 @@ fun AddUpdateTaskView(
                     Text("Cancel")
                 }
 
-                if (taskModel == null) {
-                    Button(
-                        onClick = {
-                            taskViewModel.insert(
-                                context = context,
-                                TaskModel(
-                                    date = System.currentTimeMillis(),
-                                    title = title.value,
-                                    description = desc.value,
-                                    markAs = ""
-                                ),
-                                onInsert = {
-                                    navController?.navigateUp()
-                                })
+                if (btnClicked.value) {
+                    if (taskModel == null) {
+                        Button(
+                            onClick = {
+                                btnClicked.value = false
+                                taskViewModel.insert(
+                                    context = context,
+                                    TaskModel(
+                                        id = dateWithTimeText.value.toLong(),
+                                        date = dateWithTimeText.value.toLong(),
+                                        title = title.value,
+                                        description = desc.value,
+                                        markAs = markAs.value
+                                    ),
+                                    onInsert = {
+                                        navController?.navigateUp()
+                                    })
 
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 5.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Primary
-                        )
-                    ) {
-                        Text(
-                            text = "Add",
-                            color = Color.White
-                        )
-                    }
-                }else{
-                    Button(
-                        onClick = {
-                            taskViewModel.update(
-                                context = context,
-                                TaskModel(
-                                    id = taskModel.id,
-                                    date = taskModel.date,
-                                    title = title.value,
-                                    description = desc.value,
-                                    markAs = ""
-                                ),
-                                onUpdate = {
-                                    navController?.navigateUp()
-                                })
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 5.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = Primary
+                            )
+                        ) {
+                            Text(
+                                text = "Add",
+                                color = Color.White
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = {
+                                btnClicked.value = false
+                                taskViewModel.update(
+                                    context = context,
+                                    TaskModel(
+                                        id = taskModel.id,
+                                        date = dateWithTimeText.value.toLong(),
+                                        title = title.value,
+                                        description = desc.value,
+                                        markAs = markAs.value
+                                    ),
+                                    onUpdate = {
+                                        navController?.navigateUp()
+                                    })
 
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 5.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Primary
-                        )
-                    ) {
-                        Text(
-                            text = "Update",
-                            color = Color.White
-                        )
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 5.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = Primary
+                            )
+                        ) {
+                            Text(
+                                text = "Update",
+                                color = Color.White
+                            )
+                        }
                     }
                 }
 

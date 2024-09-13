@@ -60,6 +60,8 @@ fun AddUpdateNote(
         if(noteModel == null){ "" } else { noteModel.description }
     ) }
 
+    val btnClicked = remember { mutableStateOf(true) }
+
     Scaffold(
         containerColor = Color.White,
         modifier = Modifier
@@ -143,62 +145,66 @@ fun AddUpdateNote(
                     Text("Cancel")
                 }
 
-                if (noteModel == null) {
-                    Button(
-                        onClick = {
-                            notesViewModel.insert(
-                                context = context,
-                                NoteModel(
-                                    date = System.currentTimeMillis(),
-                                    title = title.value,
-                                    description = desc.value,
-                                    noteBgColor = ""
-                                ),
-                                onInsert = {
-                                    navController?.navigateUp()
-                                })
+                if (btnClicked.value) {
+                    if (noteModel == null) {
+                        Button(
+                            onClick = {
+                                btnClicked.value = false
+                                notesViewModel.insert(
+                                    context = context,
+                                    NoteModel(
+                                        date = System.currentTimeMillis(),
+                                        title = title.value,
+                                        description = desc.value,
+                                        noteBgColor = ""
+                                    ),
+                                    onInsert = {
+                                        navController?.navigateUp()
+                                    })
 
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 5.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Primary
-                        )
-                    ) {
-                        Text(
-                            text = "Add",
-                            color = Color.White
-                        )
-                    }
-                }else{
-                    Button(
-                        onClick = {
-                            notesViewModel.update(
-                                context = context,
-                                NoteModel(
-                                    id = noteModel.id,
-                                    date = noteModel.date,
-                                    title = title.value,
-                                    description = desc.value,
-                                    noteBgColor = ""
-                                ),
-                                onUpdate = {
-                                    navController?.navigateUp()
-                                })
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 5.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = Primary
+                            )
+                        ) {
+                            Text(
+                                text = "Add",
+                                color = Color.White
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = {
+                                btnClicked.value = false
+                                notesViewModel.update(
+                                    context = context,
+                                    NoteModel(
+                                        id = noteModel.id,
+                                        date = noteModel.date,
+                                        title = title.value,
+                                        description = desc.value,
+                                        noteBgColor = ""
+                                    ),
+                                    onUpdate = {
+                                        navController?.navigateUp()
+                                    })
 
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 5.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Primary
-                        )
-                    ) {
-                        Text(
-                            text = "Update",
-                            color = Color.White
-                        )
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 5.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = Primary
+                            )
+                        ) {
+                            Text(
+                                text = "Update",
+                                color = Color.White
+                            )
+                        }
                     }
                 }
 

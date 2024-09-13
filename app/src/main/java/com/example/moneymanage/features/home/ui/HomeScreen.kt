@@ -2,6 +2,7 @@ package com.example.moneymanage.features.home.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,9 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +49,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.moneymanage.R
 import com.example.moneymanage.data.local.entity.MoneyManageModel
 import com.example.moneymanage.features.home.repository.MoneyManageRepository
 import com.example.moneymanage.features.home.viewModel.MoneyManageViewModel
@@ -300,22 +305,32 @@ fun HomeScreen(
                             .background(Color.Black.copy(alpha = 0.3f))
                     )
 
+                    ///Empty Money List
                     if (totalMoneyManageList.value.isEmpty()) {
                         Column(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.fillMaxSize()
                         ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.icon_wallet),
+                                contentDescription = "",
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .padding(bottom = 10.dp)
+                                    .size(40.dp),
+                                colorFilter = ColorFilter.tint(Color.LightGray)
+                            )
                             Text(
                                 text = "No Records Found",
                                 color = Color.LightGray,
                                 fontSize = 20.sp,
-                                modifier = Modifier.clickable { },
-                                fontFamily = fontFamily2
+                                modifier = Modifier.clickable { }
                             )
                         }
 
                     }
+                    ///Empty Money List
 
                     LazyColumn(
                         modifier = Modifier

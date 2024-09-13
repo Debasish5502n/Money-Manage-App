@@ -1,6 +1,7 @@
 package com.example.moneymanage.features.notes.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,9 +26,13 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.moneymanage.R
 import com.example.moneymanage.data.local.entity.MoneyManageModel
 import com.example.moneymanage.data.local.entity.NoteModel
 import com.example.moneymanage.features.home.repository.MoneyManageRepository
@@ -97,6 +103,33 @@ fun NotesView(
                 .background(Color.LightGray.copy(0.2f))
         ) {
             Divider()
+
+            if (allNotes.value.isEmpty()) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_note),
+                        contentDescription = "",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .padding(bottom = 10.dp)
+                            .size(40.dp),
+                        colorFilter = ColorFilter.tint(Color.LightGray)
+                    )
+                    Text(
+                        text = "Please First Add Notes",
+                        color = Color.LightGray,
+                        fontSize = 20.sp,
+                        modifier = Modifier.clickable { },
+                        fontFamily = fontFamily2
+                    )
+                }
+
+            }
+
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(2),
                 contentPadding = paddingValues,
