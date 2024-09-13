@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import com.example.moneymanage.data.local.dao.MoneyManageDao
 import com.example.moneymanage.data.local.dao.NoteDao
+import com.example.moneymanage.data.local.dao.TaskDao
 import com.example.moneymanage.data.local.database.AppDatabase
 import com.example.moneymanage.data.repository.MoneyManageRepositoryImp
 import com.example.moneymanage.data.repository.NoteRepositoryImp
+import com.example.moneymanage.data.repository.TaskRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +43,11 @@ object AppModule {
     }
 
     @Provides
+    fun provideNoteManageDao(appDatabase: AppDatabase): TaskDao {
+        return appDatabase.taskDao()
+    }
+
+    @Provides
     @Singleton
     fun provideNoteRepository(noteDao: NoteDao): NoteRepositoryImp {
         return NoteRepositoryImp(noteDao)
@@ -50,6 +57,12 @@ object AppModule {
     @Singleton
     fun provideMoneyManageRepository(moneyManageDao: MoneyManageDao): MoneyManageRepositoryImp {
         return MoneyManageRepositoryImp(moneyManageDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskRepository(taskDao: TaskDao): TaskRepositoryImp {
+        return TaskRepositoryImp(taskDao)
     }
 
 }

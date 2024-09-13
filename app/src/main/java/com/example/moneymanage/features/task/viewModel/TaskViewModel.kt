@@ -1,14 +1,13 @@
-package com.example.moneymanage.features.notes.ui
+package com.example.moneymanage.features.task.viewModel
 
 import android.content.Context
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.moneymanage.data.local.entity.MoneyManageModel
 import com.example.moneymanage.data.local.entity.NoteModel
+import com.example.moneymanage.data.local.entity.TaskModel
 import com.example.moneymanage.features.notes.repository.NoteRepository
+import com.example.moneymanage.features.task.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,56 +15,55 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NoteViewModel @Inject constructor(private val repository: NoteRepository) : ViewModel() {
+class TaskViewModel @Inject constructor(private val repository: TaskRepository) : ViewModel() {
 
     // MutableStateFlow to hold and modify the list
-    private val _allNotes = MutableStateFlow<List<NoteModel>>(emptyList())
-    val allNotes: StateFlow<List<NoteModel>> get() = _allNotes
+    private val _allTasks = MutableStateFlow<List<TaskModel>>(emptyList())
+    val allTasks: StateFlow<List<TaskModel>> get() = _allTasks
 
-    init {
-        // Initialize the flow by collecting from the repository
+    fun getTasks(markAs: String){
         viewModelScope.launch {
-            repository.getAllNotes().collect { todayList ->
-                _allNotes.value = todayList
+            repository.getAllTask(markAs).collect { todayList ->
+                _allTasks.value = todayList
             }
         }
     }
 
     fun insert(
         context: Context,
-        noteModel: NoteModel,
+        taskModel: TaskModel,
         onInsert: () -> Unit
     ) = viewModelScope.launch {
-        if (noteModel.description == ""){
+        if (taskModel.description == ""){
             Toast.makeText(context, "Enter Description", Toast.LENGTH_SHORT).show()
             return@launch
         }
-        if (noteModel.title == ""){
+        if (taskModel.title == ""){
             Toast.makeText(context, "Enter Title", Toast.LENGTH_SHORT).show()
             return@launch
         }
-        repository.insert(noteModel)
+        repository.insert(taskModel)
         onInsert()
     }
 
-    fun delete(noteModel: NoteModel) = viewModelScope.launch {
-        repository.delete(noteModel)
+    fun delete(taskModel: TaskModel) = viewModelScope.launch {
+        repository.delete(taskModel)
     }
 
     fun update(
         context: Context,
-        noteModel: NoteModel,
+        taskModel: TaskModel,
         onUpdate: () -> Unit
     ) = viewModelScope.launch {
-        if (noteModel.description == ""){
+        if (taskModel.description == ""){
             Toast.makeText(context, "Enter Description", Toast.LENGTH_SHORT).show()
             return@launch
         }
-        if (noteModel.title == ""){
+        if (taskModel.title == ""){
             Toast.makeText(context, "Enter Title", Toast.LENGTH_SHORT).show()
             return@launch
         }
-        repository.update(noteModel)
+        repository.update(taskModel)
         onUpdate()
     }
 }

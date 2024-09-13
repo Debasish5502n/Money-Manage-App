@@ -39,7 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.moneymanage.R
-import com.example.moneymanage.features.graph.MainNavGraph
+import com.example.moneymanage.graph.MainNavGraph
 import com.example.moneymanage.features.home.viewModel.MoneyManageViewModel
 import com.example.moneymanage.features.navigation.BottomNavigationBar
 import com.example.moneymanage.features.navigation.DrawerNavBody

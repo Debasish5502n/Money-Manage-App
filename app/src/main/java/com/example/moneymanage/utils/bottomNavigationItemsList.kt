@@ -18,7 +18,7 @@ val bottomNavigationItemsList = listOf(
     ),
     NavigationItem(
         title = "Todo",
-        route = MainRouteScreen.Notification.route,
+        route = MainRouteScreen.Task.route,
         selectedItem = R.drawable.icon_todo,
         unselectedItem = R.drawable.icon_todo
     ),

@@ -7,19 +7,21 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.moneymanage.data.local.entity.NoteModel
+import com.example.moneymanage.data.local.entity.TaskModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface NoteDao {
-    @Query("SELECT * FROM notes ORDER BY date DESC")
-    fun getAllNotes(): Flow<List<NoteModel>>
+interface TaskDao {
+
+    @Query("SELECT * FROM tasks ORDER BY date DESC")
+    fun getAllTasks(): Flow<List<TaskModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(noteModel: NoteModel)
+    suspend fun insert(taskModel: TaskModel)
 
     @Delete
-    suspend fun delete(noteModel: NoteModel)
+    suspend fun delete(taskModel: TaskModel)
 
     @Update
-    suspend fun update(noteModel: NoteModel)
+    suspend fun update(taskModel: TaskModel)
 }

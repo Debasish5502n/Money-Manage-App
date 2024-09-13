@@ -8,6 +8,7 @@ object Graph {
     const val SettingGraph = "settingGraph"
     const val MoneyManageGraph = "moneyManageGraph"
     const val NotesGraph = "notesGraph"
+    const val TaskGraph = "taskGraph"
 }
 
 sealed class AuthRouteScreen (val route: String) {
@@ -24,6 +25,8 @@ sealed class MainRouteScreen (var route: String) {
     object Home: MainRouteScreen("home")
 
     object Notes : MainRouteScreen("notes")
+
+    object Task : MainRouteScreen("task")
 
     object Notification: MainRouteScreen("notification")
 
@@ -54,5 +57,12 @@ sealed class NotesRouteScreen (var route: String) {
 
     object AddNote: MoneyManageRouteScreen("addNote")
     object UpdateNote: MoneyManageRouteScreen("updateNote")
+
+}
+
+sealed class TaskRouteScreen (var route: String) {
+
+    object AddTask: MoneyManageRouteScreen("addTask")
+    object UpdateTask: MoneyManageRouteScreen("updateTask")
 
 }

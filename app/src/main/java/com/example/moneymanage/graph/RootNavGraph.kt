@@ -1,4 +1,4 @@
-package com.example.moneymanage.features.graph
+package com.example.moneymanage.graph
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -29,6 +29,9 @@ fun RootNavGraph() {
             rootNavController = rootNavController
         )
         NotesGraph(
+            rootNavController = rootNavController
+        )
+        TaskGraph(
             rootNavController = rootNavController
         )
         //settingNavGraph(rootNavController = rootNavController)

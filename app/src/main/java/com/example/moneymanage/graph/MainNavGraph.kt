@@ -1,17 +1,14 @@
-package com.example.moneymanage.features.graph
+package com.example.moneymanage.graph
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.moneymanage.features.home.ui.HomeScreen
-import com.example.moneymanage.features.home.viewModel.MoneyManageViewModel
 import com.example.moneymanage.features.navigation.MainRouteScreen
-import com.example.moneymanage.features.notes.ui.NoteViewModel
 import com.example.moneymanage.features.notes.ui.NotesView
+import com.example.moneymanage.features.task.ui.TaskView
 
 @Composable
 fun MainNavGraph(
@@ -26,6 +23,12 @@ fun MainNavGraph(
     ) {
         composable(MainRouteScreen.Home.route) {
             HomeScreen(
+                innerPadding = innerPadding,
+                navController = rootNavController
+            )
+        }
+        composable(MainRouteScreen.Task.route) {
+            TaskView(
                 innerPadding = innerPadding,
                 navController = rootNavController
             )

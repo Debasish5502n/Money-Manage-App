@@ -1,4 +1,4 @@
-package com.example.moneymanage.features.graph
+package com.example.moneymanage.graph
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController

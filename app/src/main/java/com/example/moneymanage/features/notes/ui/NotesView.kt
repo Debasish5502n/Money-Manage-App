@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.moneymanage.data.local.entity.MoneyManageModel
@@ -62,7 +63,7 @@ fun NotesView(
 ) {
     val context = LocalContext.current
 
-    val notes = notesViewModel.notes.observeAsState(initial = emptyList())
+    val allNotes = notesViewModel.allNotes.collectAsStateWithLifecycle(initialValue = emptyList())
 
     Scaffold(
         containerColor = Color.White,
@@ -93,7 +94,7 @@ fun NotesView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.LightGray.copy(0.1f))
+                .background(Color.LightGray.copy(0.2f))
         ) {
             Divider()
             LazyVerticalStaggeredGrid(
@@ -103,9 +104,9 @@ fun NotesView(
                     .fillMaxSize()
                     .padding(top = 5.dp)
             ) {
-                items(notes.value.size) { item ->
+                items(allNotes.value.size) { item ->
                     ItemRow(
-                        item = notes.value[item],
+                        item = allNotes.value[item],
                         onNoteDelete = { deleteNote ->
                             notesViewModel.delete(
                                 noteModel = deleteNote
@@ -136,19 +137,16 @@ fun ItemRow(item: NoteModel,
 
     val showDeleteConfirmDialog = rememberSaveable { mutableStateOf(false) }
     val randomColors = rememberSaveable {
-        listOf(
-            "#c8ff9e",
-            "#9ecaff"
-        )
+        listOf("#fff2f2", "#fffdf2", "#f2fff2", "#f2ffff", "#f5f2ff", "#fff2ff", "#fff2f8")
     }
-    val randomColor = randomColors.random()
+    val randomColor = rememberSaveable { randomColors.random() }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp, horizontal = 4.dp)
+            .padding(vertical = 4.dp, horizontal = 5.dp)
             .clickable {
-               onNoteEdit(item)
+                onNoteEdit(item)
             },
         colors = CardDefaults.cardColors(
             containerColor = Color(android.graphics.Color.parseColor(randomColor))
@@ -158,6 +156,9 @@ fun ItemRow(item: NoteModel,
             topStart = 10.dp,
             bottomStart = 10.dp,
             bottomEnd = 10.dp
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 1.dp
         )
     ) {
 
@@ -180,8 +181,7 @@ fun ItemRow(item: NoteModel,
                         style = TextStyle(
                             color = Color.Black,
                             fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = fontFamily2
+                            fontWeight = FontWeight.Bold
                         ),
                     )
                 }
@@ -193,8 +193,7 @@ fun ItemRow(item: NoteModel,
                 style = TextStyle(
                     color = Color.Black,
                     fontSize = 15.sp,
-                    fontWeight = FontWeight.Normal,
-                    fontFamily = fontFamily2
+                    fontWeight = FontWeight.Normal
                 ),
                 modifier = Modifier.padding(top = 5.dp, start = 5.dp, end = 5.dp)
             )
@@ -210,8 +209,7 @@ fun ItemRow(item: NoteModel,
                     style = TextStyle(
                         color = Color.Black,
                         fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = fontFamily2
+                        fontWeight = FontWeight.Medium
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -254,63 +252,6 @@ fun ItemRow(item: NoteModel,
         }
 
     }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ItemAddDialog(onDismiss: () -> Unit, onAddItem: (String) -> Unit) {
-    var text = remember { mutableStateOf("") }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Add Item") },
-        text = {
-            TextField(
-                value = text.value,
-                onValueChange = { text.value = it },
-                label = { Text("Item Name") }
-            )
-        },
-        confirmButton = {
-            Button(onClick = { onAddItem(text.value) }) {
-                Text("Add")
-            }
-        },
-        dismissButton = {
-            Button(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ItemEditDialog(item: NoteModel, onDismiss: () -> Unit, onEditItem: (NoteModel) -> Unit) {
-    var text = remember { mutableStateOf(item.title) }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Edit Item") },
-        text = {
-            TextField(
-                value = text.value,
-                onValueChange = { text.value = it },
-                label = { Text("Item Name") }
-            )
-        },
-        confirmButton = {
-            Button(onClick = { onEditItem(item.copy(title = text.value)) }) {
-                Text("Save")
-            }
-        },
-        dismissButton = {
-            Button(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -370,7 +311,7 @@ fun GreetingPreview() {
 }
 
 class FakeNotesRepository : NoteRepository {
-    override fun getAllNotes(): Flow<List<NoteModel>> {
+    override suspend fun getAllNotes(): Flow<List<NoteModel>> {
         return flow {
             emit(
                 listOf(
